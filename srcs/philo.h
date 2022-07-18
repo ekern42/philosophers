@@ -6,7 +6,7 @@
 /*   By: ekern <ekern@student.42lausanne.ch>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 16:23:00 by ekern             #+#    #+#             */
-/*   Updated: 2022/07/14 14:25:22 by ekern            ###   ########.fr       */
+/*   Updated: 2022/07/18 16:29:20 by ekern            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,31 +26,48 @@
 
 typedef struct s_philo
 {
-	struct s_info *gen_info;  
+	struct s_info	*gen_info;  
 	/* 2h de perdu parce que tu n'as pointer ce "gen_info" 
 	sur la struct "info", Connard */
-	pthread_t	thread_id;
-	int			number_philo;
-}				t_philo;
+	pthread_t		thread_id;
+	pthread_mutex_t	*left_fork; /* Fork perso */
+	pthread_mutex_t	*right_fork; /* Fork du voisin de droite :n + 1 ou 0 */
+	int				personnal_no;
+	int				last_time_eaten;
+	int				nbr_time_eaten;
+}					t_philo;
 
 typedef struct	s_info
 {
-//	pthread_t	*tab[2];
-	int	nbr_of_philo;
-	int	time_to_die;
-	int	time_to_eat;
-	int	time_to_sleep;
+	int				nbr_of_philo;
+	int				nbr_time_to_eat;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
 	struct timeval	set_time;
-	t_philo		philosophers[10];
-}				t_info;
+	t_philo			*philosophers;
+	pthread_t		countdown;
+	pthread_mutex_t	*forks;
+}					t_info;
 
 
 
-/* SRCS */
+/* MAIN SRCS */
 
 void	*fc_philo(void *arg);
-int 	ft_atoi(char *src);
-void	fc_error(int error);
-int	fc_print_action(int action, t_philo *philo);
+void	*fc_death_checker(void *arg);
+void	fc_sleep(t_philo *philo);
+void	fc_eat(t_philo *philo);
+void	fc_think(t_philo *philo);
+void	fc_dead(t_philo *philo);
+void	fc_fork(t_philo *philo);
 
+/* UTILS SRCS */
+
+void	fc_error(int error);
+int		fc_timestamp(t_philo *philo);
+void	fc_print_action(int action, t_philo *philo);
+int 	ft_atoi(char *src);
+void	fc_final_free(t_info *info);
+void	fc_usleep(int time, t_philo *philo);
 #endif

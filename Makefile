@@ -6,7 +6,7 @@
 #    By: ekern <ekern@student.42lausanne.ch>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/09 13:40:58 by ekern             #+#    #+#              #
-#    Updated: 2022/07/14 12:55:27 by ekern            ###   ########.fr        #
+#    Updated: 2022/07/18 10:14:20 by ekern            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,8 @@ INCLUDES = srcs/philo.h
 SRCS = \
 	srcs/philo_main.c	\
 	srcs/philo_utils.c	\
-	srcs/states.c
+	srcs/states.c		\
+	srcs/thread_main.c
 
 OBJS = ${SRCS:c=o}
 
