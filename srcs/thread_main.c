@@ -6,7 +6,7 @@
 /*   By: ekern <ekern@student.42lausanne.ch>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 09:31:15 by ekern             #+#    #+#             */
-/*   Updated: 2022/07/18 16:37:28 by ekern            ###   ########.fr       */
+/*   Updated: 2022/07/19 12:17:01 by ekern            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 void	fc_loop(t_philo *philo)
 {
 	philo->nbr_time_eaten = 0;
-	while (1)
+	philo->gen_info->dead = 0;
+	while (philo->gen_info->dead == 0)
 	{
 		fc_fork(philo);
 		fc_eat(philo);
@@ -42,13 +43,26 @@ void	*fc_philo(void *arg)
 	return (NULL);
 }
 
+static int	fc_finish_checker(t_info *info)
+{
+	int	i;
+
+	i = 0;
+	while (info->philosophers[i].nbr_time_eaten == info->nbr_time_to_eat)
+	{
+		if (i == info->nbr_of_philo - 1)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 void	*fc_death_checker(void *arg)
 {
 	t_info	*info;
 	int		i;
 
 	info = (t_info *)arg;
-	i = 0;
 	while (1)
 	{
 		i = 0;
@@ -65,6 +79,7 @@ void	*fc_death_checker(void *arg)
 			}
 			i++;
 		}
+		if (!fc_finish_checker(info))
+			return (NULL);
 	}
-	return (NULL);
 }

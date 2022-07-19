@@ -6,7 +6,7 @@
 /*   By: ekern <ekern@student.42lausanne.ch>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 11:40:48 by ekern             #+#    #+#             */
-/*   Updated: 2022/07/18 16:40:31 by ekern            ###   ########.fr       */
+/*   Updated: 2022/07/19 11:34:37 by ekern            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,14 @@ pour faire apparaitre le bon id
 */
 void	fc_usleep(int time, t_philo *philo)
 {
-	long int	precise_usleep;
+	int	precise_usleep;
 
-	precise_usleep = fc_timestamp(philo) + time / 1000;
-	while (fc_timestamp(philo) < precise_usleep)
-		usleep(100);
+	precise_usleep = (fc_timestamp(philo) + time) * 1000;
+	while ((fc_timestamp(philo) * 1000) != precise_usleep)
+		usleep(1);
 }
+
+/* Precise usleep = timestamp + time_to_sleep ou time_to_eat*/
 
 int	fc_timestamp(t_philo *philo)
 {
@@ -69,7 +71,7 @@ void	fc_error(int error)
 		printf("Args should be higher than 0\n");
 	else if (error == 4)
 		printf("Max 100 philosophers\n");
-	exit(0);
+	exit (0);
 }
 
 int	ft_atoi(char *src)

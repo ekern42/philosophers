@@ -6,7 +6,7 @@
 /*   By: ekern <ekern@student.42lausanne.ch>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 16:25:57 by ekern             #+#    #+#             */
-/*   Updated: 2022/07/18 16:39:19 by ekern            ###   ########.fr       */
+/*   Updated: 2022/07/19 12:11:30 by ekern            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,11 @@ static int	fc_gen_init(t_info *info, char **av, int ac)
 
 void	fc_final_free(t_info *info)
 {
+	int	i;
+
+	i = -1;
+	while (++i < info->nbr_of_philo - 1)
+		pthread_mutex_destroy(&info->forks[i]);
 	free(info->philosophers);
 	free(info->forks);
 }
@@ -75,12 +80,17 @@ void	fc_final_free(t_info *info)
 int	main(int ac, char **av)
 {
 	t_info	info;
+	int	i;
 
+	i = 0;
 	if (ac < 5 || ac > 6)
 		fc_error(2);
 	fc_gen_init(&info, av, ac);
 	fc_init_thread(&info);
 	pthread_join(info.countdown, NULL);
+//	printf("blblblblblb\n");
+	while (pthread_join(info.philosophers[i].thread_id, NULL))
+	i++;
 	fc_final_free(&info);
 	return (0);
 }
