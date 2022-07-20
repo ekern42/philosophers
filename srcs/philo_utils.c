@@ -6,26 +6,20 @@
 /*   By: ekern <ekern@student.42lausanne.ch>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 11:40:48 by ekern             #+#    #+#             */
-/*   Updated: 2022/07/19 11:34:37 by ekern            ###   ########.fr       */
+/*   Updated: 2022/07/20 13:58:19 by ekern            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-/* Au lieu d'utiliser la struct info, il faut utiliser la struct philo 
-qui est directement liee a un seul philosopher c'est plus simple 
-pour faire apparaitre le bon id
-*/
 void	fc_usleep(int time, t_philo *philo)
 {
 	int	precise_usleep;
 
 	precise_usleep = (fc_timestamp(philo) + time) * 1000;
 	while ((fc_timestamp(philo) * 1000) != precise_usleep)
-		usleep(1);
+		usleep(100);
 }
-
-/* Precise usleep = timestamp + time_to_sleep ou time_to_eat*/
 
 int	fc_timestamp(t_philo *philo)
 {
@@ -37,7 +31,6 @@ int	fc_timestamp(t_philo *philo)
 	act_time.tv_usec -= philo->gen_info->set_time.tv_usec;
 	time = act_time.tv_usec / 1000;
 	time += act_time.tv_sec * 1000;
-//	printf("%d\n", time);
 	return (time);
 }
 
@@ -46,19 +39,18 @@ void	fc_print_action(int action, t_philo *philo)
 	int	time;
 	int	no;
 
-//	id = (long *)philo->thread_id;	//id du thread
 	time = fc_timestamp(philo);
 	no = philo->personnal_no;
 	if (action == 1)
-		printf("Time : %dms	| No %i has taken a fork\n", time, no);
+		printf("%d\t%i\thas taken a fork\n", time, no);
 	else if (action == 2)
-		printf("Time : %dms	| No %i is eating\n", time, no);
+		printf("%d\t%i\tis eating\n", time, no);
 	else if (action == 3)
-		printf("Time : %dms	| No %i is sleeping\n", time, no);
+		printf("%d\t%i\tis sleeping\n", time, no);
 	else if (action == 4)
-		printf("Time : %dms	| No %i is thinking\n", time, no);
+		printf("%d\t%i\tis thinking\n", time, no);
 	else if (action == 5)
-		printf("Time : %dms	| No %i died\n", time, no);
+		printf("%d\t%i\tdied\n", time, no);
 }
 
 void	fc_error(int error)

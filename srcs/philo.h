@@ -6,7 +6,7 @@
 /*   By: ekern <ekern@student.42lausanne.ch>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 16:23:00 by ekern             #+#    #+#             */
-/*   Updated: 2022/07/19 12:15:42 by ekern            ###   ########.fr       */
+/*   Updated: 2022/07/20 13:45:23 by ekern            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,9 @@
 typedef struct s_philo
 {
 	struct s_info	*gen_info;
-	/* 2h de perdu parce que tu n'as pointer ce "gen_info" 
-	sur la struct "info", Connard */
 	pthread_t		thread_id;
-	pthread_mutex_t	*left_fork; /* Fork perso */
-	pthread_mutex_t	*right_fork; /* Fork du voisin de droite :n + 1 ou 0 */
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork;
 	int				personnal_no;
 	int				last_time_eaten;
 	int				nbr_time_eaten;
@@ -44,7 +42,7 @@ typedef struct s_info
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
-	int				dead;	
+	int				finish;	
 	struct timeval	set_time;
 	t_philo			*philosophers;
 	pthread_t		countdown;

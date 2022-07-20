@@ -6,17 +6,12 @@
 /*   By: ekern <ekern@student.42lausanne.ch>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 16:25:57 by ekern             #+#    #+#             */
-/*   Updated: 2022/07/19 12:11:30 by ekern            ###   ########.fr       */
+/*   Updated: 2022/07/20 13:47:30 by ekern            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-/* Ligne 30, le usleep permet de finir les pthreads
- 	avant que le thread priincipal
-	se termine, parce que s'il se termine avant, les pthread n'auront pas le temps
-	de finir leur programme. Ou mettre une boucle while(1)
-*/
 static int	fc_init_philo(t_info *info, int i)
 {
 	info->philosophers[i].gen_info = info;
@@ -55,6 +50,7 @@ static int	fc_gen_init(t_info *info, char **av, int ac)
 		info->nbr_time_to_eat = ft_atoi(av[5]);
 	else
 		info->nbr_time_to_eat = -1;
+	info->finish = 0;
 	if ((info->nbr_of_philo < 1) | (info->time_to_die < 1) | \
 	(info->time_to_eat < 1) | (info->time_to_sleep < 1))
 		fc_error(3);
@@ -80,7 +76,7 @@ void	fc_final_free(t_info *info)
 int	main(int ac, char **av)
 {
 	t_info	info;
-	int	i;
+	int		i;
 
 	i = 0;
 	if (ac < 5 || ac > 6)
@@ -88,9 +84,8 @@ int	main(int ac, char **av)
 	fc_gen_init(&info, av, ac);
 	fc_init_thread(&info);
 	pthread_join(info.countdown, NULL);
-//	printf("blblblblblb\n");
 	while (pthread_join(info.philosophers[i].thread_id, NULL))
-	i++;
+		i++;
 	fc_final_free(&info);
 	return (0);
 }
